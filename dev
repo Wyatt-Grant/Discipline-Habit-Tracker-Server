@@ -1,0 +1,26 @@
+if [ "$1" == "artisan" ] || [ "$1" == "art" ]; then
+    eval "docker exec -it app php artisan ${@:2}"
+    exit 0
+elif [ "$1" == "composer" ]; then
+    eval "docker exec -it app composer ${@:2}"
+    exit 0
+elif [ "$1" == "up" ]; then
+    eval "docker compose up -d"
+    exit 0
+elif [ "$1" == "rebuild" ]; then
+    eval "docker compose up --build -d"
+    exit 0
+elif [ "$1" == "down" ]; then
+    eval "docker compose down"
+    exit 0
+elif [ "$1" == "tinker" ]; then
+    eval "docker exec -it app php artisan tinker"
+    exit 0
+elif [ "$1" == "setup-test-db" ]; then
+    eval "docker exec -it db mysql -uroot -proot2336 -e \"create database testing;\""
+    eval "docker exec -it db mysql -uroot -proot2336 -e \"GRANT ALL ON testing.* TO sail\""
+    exit 0
+else
+    echo "Invalid command :("
+    exit 0
+fi

@@ -1,0 +1,89 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: digitalocean.com/php
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - app-network
+
+  #nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - app-network
+
+  #DB Service
+  db:
+    image: mariadb:10.7.1
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "${DB_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: disciplinehabittracker
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root2336
+      MYSQL_USER: sail
+      MYSQL_PASSWORD: disciplinepass
+    volumes:
+      - './mysql/data:/var/lib/mysql'
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+  #redis Service
+#   redis:
+#       image: 'redis:alpine'
+#       container_name: redis
+#       restart: unless-stopped
+#       tty: true
+#       ports:
+#           - '6379:6379'
+#       volumes:
+#           - ./redis:/data
+#       networks:
+#           - app-network
+
+  #certbot
+  certbot:
+      image: certbot/certbot:latest
+      container_name: certbot
+      volumes:
+          - ./certbot/www/:/var/www/certbot/:rw
+          - ./certbot/conf/:/etc/letsencrypt/:rw
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
