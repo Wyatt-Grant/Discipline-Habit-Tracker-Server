@@ -1,3 +1,7 @@
+# 📌 Discipline Apps
+iOS: https://github.com/Wyatt-Grant/Discipline-Habit-Tracker-Android-App
+Android: https://github.com/Wyatt-Grant/Discipline-Habit-Tracker-iOS-App
+
 # 📌 Dsicipline API Documentation
 
 This project exposes a set of RESTful API endpoints, organized by resource.  
