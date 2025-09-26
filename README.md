@@ -1,66 +1,121 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📌 Dsicipline API Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project exposes a set of RESTful API endpoints, organized by resource.  
+All routes are prefixed with `/api` and most require authentication via **Laravel Sanctum**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🔑 Authentication & User
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Method | Endpoint     | Middleware     | Description |
+|--------|--------------|----------------|-------------|
+| POST   | `/token`     | –              | Authenticate user and issue token |
+| POST   | `/register`  | –              | Register a new user |
+| GET    | `/user`      | `auth:sanctum` | Get the authenticated user |
+| POST   | `/setAPN`    | `auth:sanctum` | Set Apple Push Notification token |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📂 Dynamics
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Method | Endpoint             | Middleware             | Description |
+|--------|----------------------|------------------------|-------------|
+| GET    | `/dynamic`           | `auth:sanctum`         | Get dynamic info |
+| PUT    | `/dynamic/{dynamic}` | `auth:sanctum`, `owns.dynamic` | Update a dynamic |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## ✅ Tasks
 
-## Laravel Sponsors
+| Method | Endpoint                        | Middleware             | Description |
+|--------|---------------------------------|------------------------|-------------|
+| GET    | `/tasks`                        | `auth:sanctum`         | Get all tasks |
+| POST   | `/tasks`                        | `auth:sanctum`         | Create a new task |
+| PUT    | `/task/{task}`                  | `auth:sanctum`, `owns.task` | Update a task |
+| DELETE | `/task/{task}`                  | `auth:sanctum`, `owns.task` | Delete a task |
+| POST   | `/complete-task/{task}`         | `auth:sanctum`, `owns.task` | Mark task as complete |
+| POST   | `/uncomplete-task/{task}`       | `auth:sanctum`, `owns.task` | Mark task as incomplete |
+| POST   | `/assign-group/{task}/{group}`  | `auth:sanctum`, `owns.task`, `owns.group` | Assign task to group |
+| POST   | `/unassign-group/{task}/{group}`| `auth:sanctum`, `owns.task`, `owns.group` | Remove task from group |
+| GET    | `/tasks/remaining`              | `auth:sanctum`         | Get daily remaining task count |
+| GET    | `/tasks/reminders`              | `auth:sanctum`         | Get task reminders |
+| POST   | `/complete-task-history/{taskHistory}`   | `auth:sanctum`, `owns.taskhistory` | Complete a task history entry |
+| POST   | `/uncomplete-task-history/{taskHistory}` | `auth:sanctum`, `owns.taskhistory` | Undo completion of a task history entry |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+## ⚖️ Punishments
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+| Method | Endpoint                          | Middleware             | Description |
+|--------|-----------------------------------|------------------------|-------------|
+| GET    | `/punishments`                    | `auth:sanctum`         | Get all punishments |
+| POST   | `/punishments`                    | `auth:sanctum`         | Create a punishment |
+| PUT    | `/punishment/{punishment}`        | `auth:sanctum`, `owns.punishment` | Update a punishment |
+| DELETE | `/punishment/{punishment}`        | `auth:sanctum`, `owns.punishment` | Delete a punishment |
+| POST   | `/add-punishment/{punishment}`    | `auth:sanctum`, `owns.punishment` | Increment punishment |
+| POST   | `/remove-punishment/{punishment}` | `auth:sanctum`, `owns.punishment` | Decrement punishment |
+| POST   | `/assign-punishment/{punishment}/{task}`   | `auth:sanctum`, `owns.punishment`, `owns.task` | Assign punishment to task |
+| POST   | `/unassign-punishment/{punishment}/{task}` | `auth:sanctum`, `owns.punishment`, `owns.task` | Remove punishment from task |
+| GET    | `/punishments/assigned`           | `auth:sanctum`         | Get total assigned punishments count |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🏆 Rewards
 
-## Code of Conduct
+| Method | Endpoint                          | Middleware             | Description |
+|--------|-----------------------------------|------------------------|-------------|
+| GET    | `/rewards`                        | `auth:sanctum`         | Get all rewards |
+| POST   | `/rewards`                        | `auth:sanctum`         | Create a reward |
+| PUT    | `/reward/{reward}`                | `auth:sanctum`, `owns.reward` | Update a reward |
+| DELETE | `/reward/{reward}`                | `auth:sanctum`, `owns.reward` | Delete a reward |
+| POST   | `/add-reward/{reward}`            | `auth:sanctum`, `owns.reward` | Increment reward |
+| POST   | `/remove-reward/{reward}`         | `auth:sanctum`, `owns.reward` | Decrement reward |
+| POST   | `/assign-reward/{reward}/{task}`  | `auth:sanctum`, `owns.reward`, `owns.task` | Assign reward to task |
+| POST   | `/unassign-reward/{reward}/{task}`| `auth:sanctum`, `owns.reward`, `owns.task` | Remove reward from task |
+| GET    | `/points`                         | `auth:sanctum`         | Get current points |
+| POST   | `/add-point`                      | `auth:sanctum`         | Add a point |
+| POST   | `/remove-point`                   | `auth:sanctum`         | Remove a point |
+| GET    | `/bank`                           | `auth:sanctum`         | Get banked reward count |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 💬 Messages
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Method | Endpoint                          | Middleware             | Description |
+|--------|-----------------------------------|------------------------|-------------|
+| GET    | `/messages`                       | `auth:sanctum`         | Get all messages |
+| POST   | `/messages`                       | `auth:sanctum`         | Create a message |
+| PUT    | `/message/{message}`              | `auth:sanctum`, `owns.message` | Update a message |
+| DELETE | `/message/{message}`              | `auth:sanctum`, `owns.message` | Delete a message |
+| POST   | `/assign-message/{message}/{task}`| `auth:sanctum`, `owns.message`, `owns.task` | Assign message to task |
+| POST   | `/unassign-message/{message}/{task}` | `auth:sanctum`, `owns.message`, `owns.task` | Remove message from task |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📜 Rules
+
+| Method | Endpoint             | Middleware             | Description |
+|--------|----------------------|------------------------|-------------|
+| GET    | `/rules`             | `auth:sanctum`         | Get all rules |
+| POST   | `/rules`             | `auth:sanctum`         | Create a rule |
+| PUT    | `/rule/{rule}`       | `auth:sanctum`, `owns.rule` | Update a rule |
+| DELETE | `/rule/{rule}`       | `auth:sanctum`, `owns.rule` | Delete a rule |
+
+---
+
+## 👥 Groups
+
+| Method | Endpoint             | Middleware             | Description |
+|--------|----------------------|------------------------|-------------|
+| GET    | `/groups`            | `auth:sanctum`         | Get all groups |
+| POST   | `/groups`            | `auth:sanctum`         | Create a group |
+| POST   | `/sort-groups`       | `auth:sanctum`         | Update group sorting |
+| PUT    | `/group/{group}`     | `auth:sanctum`, `owns.group` | Update a group |
+| DELETE | `/group/{group}`     | `auth:sanctum`, `owns.group` | Delete a group |
+
+---
+
+## ⚙️ Middleware Notes
+
+- **`auth:sanctum`** → Requires authentication via Laravel Sanctum token.  
+- **`owns.*`** → Custom ownership checks (e.g., `owns.task`, `owns.reward`) ensure that only the owner of a resource can modify it.
